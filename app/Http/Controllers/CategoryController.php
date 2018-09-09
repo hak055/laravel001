@@ -17,14 +17,13 @@ class CategoryController extends Controller
     public function index()
     {
 		$categories = category::all();
-        return view('home', compact('categories'));
+		$products = product::all();
+        return view('home', compact('categories', 'products'));
     }
 	
 	public function create()
-    {
-		
-    	
-        return view('create_category');
+    {		    	
+      return view('create_category');
     }
 
     /**
@@ -41,6 +40,7 @@ class CategoryController extends Controller
 		'title'=>'required|unique:categories',
         ]);
 		$category->title = $request->title;
+		
         $category->save();
         return redirect('/home');		
     }
@@ -52,22 +52,25 @@ class CategoryController extends Controller
 		
 	}
 	
-	 public function edit(Category $category)
+	 public function edit($id)
 	{
+		$category = Category::find($id);
+		
         return view('edit_category', compact('category'));
     }
 	
-    public function update(Category $category)
+    public function update(Request $request, $id)
 	{
+		
     	$this->validate(request(),
-        			array(
-        				'title' => 'required|min:3'
-        			)
-        		);
-    	$category->update(
-    				request(array('title'))
-    			);
-       return redirect('/'); 
+        			array('title' => 'required|min:1'
+        			));
+					
+		$category = Category::find($id);
+		$category->title = $request->input('title');
+		$category->update();
+    	
+       return redirect('/home'); 
     }
 	
 	 public function destroy(Category $category)

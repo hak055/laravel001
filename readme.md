@@ -22,6 +22,6 @@
 пользователя. 
 $user = new User;
 $user->name = "Sasha";
-$user->email = "Sasha@gmail.com.com";
+$user->email = "Sasha@gmail.com";
 $user->password = Hash::make('123456');
 $user->save();
